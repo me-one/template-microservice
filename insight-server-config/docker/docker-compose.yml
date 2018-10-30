@@ -1,0 +1,95 @@
+version: '3.2'
+
+services:
+  zk:
+    image: ampregistry:5000/sng-biz-zookeeper:3.4.13
+    restart: always
+    container_name: zk
+    ports:
+      - 2181:2181
+  kafka:
+    image: ampregistry:5000/sng-biz-kafka:2.11-2.0.0
+    restart: always
+    container_name: kafka
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 10.156.2.38
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_PORT: 9092
+      KAFKA_CREATE_TOPICS: test:1:1
+      KAFKA_ZOOKEEPER_CONNECT: 10.156.2.38:2181/kafka
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - zk
+  es:
+    image: ampregistry:5000/sng-biz-elasticsearch:5.6.9-alpha-180831
+    container_name: es
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      discovery.type: single-node
+      ES_CLUSTER_NAME: elk
+      ES_NODE_NAME: node0
+      ES_NETWORK_HOST: 0.0.0.0
+      XMG: 2
+  kibana:
+    image: ampregistry:5000/sng-biz-elastic-kibana:5.6.9-alpha-180903
+    container_name: kibana
+    ports:
+    - 5611:5601
+    environment:
+      ELASTICSEARCH: 10.156.2.38
+      ELASTICSEARCH_PORT: 9200
+      ELASTICSEARCH_USERNAME: kibana
+      ELASTICSEARCH_PASSWORD: changeme
+    depends_on:
+      - es
+  logstash:
+    image: ampregistry:5000/sng-biz-elastic-logstash:5.6.9-alpha-180829
+    container_name: logstash
+    environment:
+      BOOTSTRAP_SERVERS: '\"10.156.2.38:9092\"'
+      ES_HOSTS: '\"10.156.2.38:9200\"'
+      ELASTICSEARCH_HOST_PORT: 10.156.2.38:9200
+      ELASTICSEARCH_NAME: logstash_system
+      ELASTICSEARCH_PASSWORD: changeme
+    depends_on:
+      - kafka
+  mongodb:
+    image: ampregistry:5000/sng-biz-mongo-repl:27027.3.4.10
+    container_name: mongodb
+    ports:
+      - 27027:27027
+    environment:
+      CACHESIZEGB: 2
+      REPLSET: 'true'
+      AUTH: 'true'
+      MONGO_HOST: 10.156.2.38
+  postgres:
+    image: postgres:10.5-alpine
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 1a2s3d.qwe
+  zipkin:
+    image: ampregistry:5000/sng-biz-zipkin-server:2.11.4
+    container_name: zipkin
+    ports:
+      - 9411:9411
+    environment:
+      STORAGE_TYPE: elasticsearch
+      ES_HOSTS: 10.156.2.38:9200
+      ES_INDEX: logstash-logs-zipkin
+      ES_INDEX_SHARDS: 5
+      ES_INDEX_REPLICAS: 1
+      ES_USERNAME: elastic
+      ES_PASSWORD: changeme
+      ES_HTTP_LOGGING: BASIC
+      KAFKA_BOOTSTRAP_SERVERS: 10.156.2.38:9092
+    depends_on:
+      - logstash
+      - es

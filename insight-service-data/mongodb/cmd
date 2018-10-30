@@ -1,0 +1,17 @@
+use testdb
+db.createUser(
+  {
+    user: "adminx",
+    pwd: "1a2s3d.qwe",
+    roles: [
+      {
+        role: "readWrite",
+        db: "testdb"
+      },
+      {
+        role: "dbAdmin",
+        db: "testdb"
+      },
+    ]
+  }
+)

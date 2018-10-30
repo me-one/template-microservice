@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    refresh:
+      enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+
+encrypt:
+  keyStore:
+    alias: configkey
+    location: classpath:/keys/config.jks
+    password: ${CONFIG_KEYSTORE_PASSWORD:1a2s3d.qwe}
+    secret: ${CONFIG_KEY_PASSWORD:1a2s3d.qwe}

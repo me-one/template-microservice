@@ -1,0 +1,35 @@
+server:
+  port: 8888
+
+spring:
+  cloud:
+    refresh:
+      enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+
+#
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+
+eureka:
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    server:
+      waitTimeInMsWhenSyncEmpty: 0
+    serviceUrl:
+      defaultZone: http://eureka:1a2s3d.qwe@localhost:8888/eureka/
+
+#security:
+#  basic:
+#    enabled: true
+#  user:
+#    name: eureka
+#    password: 1a2s3d.qwe
+
+logstash:
+  host: localhost

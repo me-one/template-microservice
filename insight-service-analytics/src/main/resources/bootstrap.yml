@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: service-analytics
+  cloud:
+    config:
+      uri: http://localhost:9999
+      fail-fast: true
+      username: admin
+      password: ${SERVER_CONFIG_PASSWORD:1a2s3d.qwe}

@@ -1,0 +1,52 @@
+server:
+  port: 6666
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+      - id: service-auth
+        uri: lb://service-auth
+        predicates:
+        - Path=/api/auth/**
+        filters:
+        - StripPrefix=2
+        - RemoveRequestHeader=Cookie, Set-Cookie
+      - id: service-analytics
+        uri: lb://service-analytics
+        predicates:
+        - Path=/api/analytics/**
+        filters:
+        - StripPrefix=2
+        - RemoveRequestHeader=Cookie, Set-Cookie
+      - id: service-finance
+        uri: lb://service-finance
+        predicates:
+        - Path=/api/finance/**
+        filters:
+        - StripPrefix=2
+        - RemoveRequestHeader=Cookie, Set-Cookie
+    refresh:
+      enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+#
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+#
+eureka:
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://eureka:1a2s3d.qwe@localhost:8888/eureka/
+  instance:
+    hostname: localhost
+
+logstash:
+  host: localhost

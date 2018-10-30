@@ -1,0 +1,6 @@
+docker exec -it --user=postgres postgres psql template1  ///  psql -d template1 -U postgres
+
+CREATE USER appuser WITH PASSWORD '1a2s3d.qwe';
+CREATE DATABASE testdb;
+GRANT ALL PRIVILEGES ON DATABASE testdb to appuser;
+\q

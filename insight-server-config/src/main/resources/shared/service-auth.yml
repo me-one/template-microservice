@@ -1,0 +1,55 @@
+security:
+  oauth2:
+    client:
+      clientId: service-auth
+      password: 1a2s3d.qwe
+
+server:
+  port: 5555
+# servlet:
+#   contextPath: /auth
+
+#
+logging:
+  level:
+    org.springframework.security: DEBUG
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: appuser
+    password: '{cipher}AQCBa2JvmS9Lkhb+Qucdz6O+nH57PvznK2g+yjPpnTEYhl5Cd+mFZXEZpxdYhTEcK+DmNI65sI7gCZ37B227YD2QbyDJ900EYDWIhcdClTrP1G9A6c77crPUzXve8ef2a5fFRz0QQwaTDCT5KPBv3SHJBnX6WR6bMjZ0do3/o3RX3uYoEvlhiF31KxV6RkaRGrz6fW0Ri4GkY+qBsnQ/ygiFQr+A0Dg3Xb5+boJPAOm6I3rwFxOBTLg0G1N+yt2d9DJMaYpVz94KN1lcOL4hnjPN1Q7EJ+UmmIBO34sA1kTrL60DhgejaMKYcEZRE7lEcoqRF5MDYw5JyyIwEUI49bw0tJp0bh2O8RtlHZrE3zN/DIh2YOoF8YgOHdw8wyNqbew='
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  cloud:
+    refresh:
+      enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+#
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,bus-refresh
+
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka:1a2s3d.qwe@localhost:8888/eureka/
+  instance:
+    hostname: localhost
+
+logstash:
+  host: localhost

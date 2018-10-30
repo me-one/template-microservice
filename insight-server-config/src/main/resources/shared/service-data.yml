@@ -1,0 +1,59 @@
+server:
+  port: 8300
+#
+spring:
+  cloud:
+    refresh:
+      enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+  zipkin:
+    sender:
+      type: kafka
+    baseUrl: http://localhost:9411/
+  sleuth:
+    sampler:
+      probability: 1.0
+  data:
+    mongodb:
+      uri: mongodb://adminx:1a2s3d.qwe@10.156.2.38:27027/testdb
+  datasource:
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: appuser
+    password: '{cipher}AQCBa2JvmS9Lkhb+Qucdz6O+nH57PvznK2g+yjPpnTEYhl5Cd+mFZXEZpxdYhTEcK+DmNI65sI7gCZ37B227YD2QbyDJ900EYDWIhcdClTrP1G9A6c77crPUzXve8ef2a5fFRz0QQwaTDCT5KPBv3SHJBnX6WR6bMjZ0do3/o3RX3uYoEvlhiF31KxV6RkaRGrz6fW0Ri4GkY+qBsnQ/ygiFQr+A0Dg3Xb5+boJPAOm6I3rwFxOBTLg0G1N+yt2d9DJMaYpVz94KN1lcOL4hnjPN1Q7EJ+UmmIBO34sA1kTrL60DhgejaMKYcEZRE7lEcoqRF5MDYw5JyyIwEUI49bw0tJp0bh2O8RtlHZrE3zN/DIh2YOoF8YgOHdw8wyNqbew='
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  jpa:
+    show: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.PostgresPlusDialect
+#
+management:
+  endpoints:
+    web:
+      exposure:
+        include: bus-refresh
+#
+eureka:
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://eureka:1a2s3d.qwe@localhost:8888/eureka/
+  instance:
+    hostname: localhost
+#
+sample:
+  zipkin:
+    # When enabled=false, traces log to the console. Comment to send to zipkin
+    enabled: true
+#
+logstash:
+  host: localhost
